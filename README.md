@@ -30,6 +30,37 @@ On peut alors résumer la commande reset par :
 
 ![Git Reset](http://blog.octo.com/wp-content/uploads/2010/10/git-reset.png "Git Reset")
 
+## Repository settings
+
+### Require expression in commit messages
+
+```
+^(feat|fix|refactor|docs|test|revert|perf|build|chore|ci|style|Merge)(:|\(\w+\):).*$
+```
+
+Example:
+
+ - feat: login
+ - ci(test): add phpunit job
+
+### Branch name
+
+```
+^(master|main|develop)$|^(feature|release|hotfix|refactor|ref|bug|wip)\/.*$
+```
+
+Example:
+
+ - master
+ - feature/login
+ - hotfix/redirect-page
+
+### Prohibited file names
+
+```
+.*\.(exe|war|ear|msi|apk|ipa|cab|rpm|mp4|ogg|iso|class|avi|wmv|mov|deb|bar|zip|gz|mkv|mp3|rar|tar|torrent|7z)$
+```
+
 ## Tips
 
 ### Diff
@@ -76,7 +107,7 @@ Lorsque l'on souhaite ajouter une fonctionnalité, nous passons par une nouvelle
 > Nomenclature : feature_x
 
 ```bash
-git checkout -b feature_x develop
+git checkout -b feature/x develop
 ```
 
 On travaille sur notre fonctionnalité :
@@ -90,9 +121,9 @@ Quand on a fini la fonctionnalité, on pousse tout ça :
 ```bash
 git pull origin develop
 git checkout develop 
-git merge --no-ff feature_x
+git merge --no-ff feature/x
 git push
-git branch -d feature_x
+git branch -d feature/x
 ```
 
 ### Création d'une release
@@ -101,22 +132,22 @@ Cette partie n'est pas nécessaire mais il se peut que l'on ai à le faire.
 
 On commence par créer la release :
 ```bash
-git checkout -b release-0.1 develop
+git checkout -b release/0.1 develop
 ```
 
 Une fois la release fini on merge la release sur la branche master et on l'a pousse (si on a les droits) :
 ```bash
 git checkout master
-git merge release-0.1
+git merge release/0.1
 git push
 ```
 
 On la pousse aussi sur la branche develop pour que tout le monde soit à jour :
 ```bash
 git checkout develop
-git merge release-0.1
+git merge release/0.1
 git push
-git branch -d release-0.1
+git branch -d release/0.1
 ```
 
 ### Ajout d'un tag
@@ -140,26 +171,33 @@ Il est fort probable qu'un bug apparaît dans l'application.
 > Nomenclature : issues-x
 
 ```bash
-git checkout -b issue-#001 master
+git checkout -b issue/#001 master
 ```
 
 Une fois corrigé, il faut juste la merger :
 ```bash
 git checkout master
-git merge issue-#001
+git merge issue/#001
 git push
 ```
 
 Pour que toute l'équipe soit à jour, il faut aussi le pousser sur develop :
 ```bash
 git checkout develop
-git merge issue-#001
+git merge issue/#001
 git push
-git branch -d issue-#001
+git branch -d issue/#001
+```
+
+### Récupérer les branches remote à jour
+
+```bash
+git remote update origin --prune
 ```
 
 ## Lien(s) utile(s)
 
+ - [Mon fichier .gitconfig](https://raw.githubusercontent.com/Spooky063/dotfiles/master/config/.gitconfig)
  - [Migrer un projet SVN vers GIT](http://www.yterium.net/Migrer-un-projet-SVN-vers-GIT "Migrer un projet SVN vers GIT")
 
   
